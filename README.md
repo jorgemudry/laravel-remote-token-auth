@@ -1,8 +1,8 @@
 # Laravel Remote Token Auth
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/jorgemudry/remote-token-auth.svg?style=flat-square)](https://packagist.org/packages/jorgemudry/remote-token-auth)
-[![Total Downloads](https://img.shields.io/packagist/dt/jorgemudry/remote-token-auth.svg?style=flat-square)](https://packagist.org/packages/jorgemudry/remote-token-auth)
-![GitHub Actions](https://github.com/jorgemudry/remote-token-auth/actions/workflows/main.yml/badge.svg)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/jorgemudry/laravel-remote-token-auth.svg?style=flat-square)](https://packagist.org/packages/jorgemudry/laravel-remote-token-auth)
+[![Total Downloads](https://img.shields.io/packagist/dt/jorgemudry/laravel-remote-token-auth.svg?style=flat-square)](https://packagist.org/packages/jorgemudry/laravel-remote-token-auth)
+![GitHub Actions](https://packagist.org/packages/jorgemudry/laravel-remote-token-auth/actions/workflows/main.yml/badge.svg)
 
 This package provides a hassle-free way to incorporate authentication in your application by integrating with an external service.
 
