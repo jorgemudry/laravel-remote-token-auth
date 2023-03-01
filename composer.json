@@ -1,0 +1,62 @@
+{
+    "name": "jorgemudry/laravel-remote-token-auth",
+    "description": "This package provides a hassle-free way to incorporate authentication in your application by integrating with an external api.",
+    "keywords": [
+        "laravel",
+        "auth",
+        "api",
+        "token",
+        "stateless",
+        "external"
+    ],
+    "homepage": "https://github.com/jorgemudry/laravel-remote-token-auth",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Jorge Mudry",
+            "email": "jorgemudry@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0|^9.0|^10.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.6",
+        "orchestra/testbench": "^6.0",
+        "pestphp/pest": "^1.22",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JorgeMudry\\LaravelRemoteTokenAuth\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JorgeMudry\\LaravelRemoteTokenAuth\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "pint": "vendor/bin/pint",
+        "stan": "vendor/bin/phpstan"
+
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JorgeMudry\\LaravelRemoteTokenAuth\\Providers\\LaravelRemoteTokenAuthServiceProvider"
+            ]
+        }
+    }
+}
