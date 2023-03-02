@@ -1,8 +1,11 @@
 # Laravel Remote Token Auth
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/jorgemudry/laravel-remote-token-auth.svg?style=flat-square)](https://packagist.org/packages/jorgemudry/laravel-remote-token-auth)
-[![Total Downloads](https://img.shields.io/packagist/dt/jorgemudry/laravel-remote-token-auth.svg?style=flat-square)](https://packagist.org/packages/jorgemudry/laravel-remote-token-auth)
-![GitHub Actions](https://packagist.org/packages/jorgemudry/laravel-remote-token-auth/actions/workflows/main.yml/badge.svg)
+<p align="center">
+<a href="https://github.com/jorgemudry/laravel-remote-token-auth/actions"><img src="https://github.com/jorgemudry/laravel-remote-token-auth/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/jorgemudry/laravel-remote-token-auth"><img src="https://img.shields.io/packagist/dt/jorgemudry/laravel-remote-token-auth" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/jorgemudry/laravel-remote-token-auth"><img src="https://img.shields.io/packagist/v/jorgemudry/laravel-remote-token-auth" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/jorgemudry/laravel-remote-token-auth"><img src="https://img.shields.io/packagist/l/jorgemudry/laravel-remote-token-auth" alt="License"></a>
+</p>
 
 This package provides a hassle-free way to incorporate authentication in your application by integrating with an external service.
 
