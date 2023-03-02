@@ -1,7 +1,5 @@
 <?php
 
-//phpcs:ignore
-
 declare(strict_types=1);
 
 /*

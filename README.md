@@ -47,7 +47,10 @@ Route::get('/users', function (Request $request) {
 
 ## Advanced Usage
 
-To create a custom implementation of the class that calls the external API to validate the token, simply implement the AdapterInterface interface on your class. Then, bind the interface to your implementation in the register method of the AuthServiceProvider. This will allow you to use your own implementation of the class for token validation.
+### Custom Adapter Implementation
+To create a custom implementation of the class that calls the external API to validate the token, simply implement the AdapterInterface interface on your class. Then, bind the interface to your implementation in the register method of the AuthServiceProvider.
+
+This will allow you to use your own implementation of the class for token validation.
 
 ```php
 <?php
@@ -102,6 +105,48 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->bind(AdapterInterface::class, MyAdapter::class);
     }
 }
+```
+### Using Your Own `Authenticated User` Class
+If you want to use your own class as the logged-in user, you can easily replace the default class with your own. To do this, your custom class must accept an array as a constructor argument and implement the `Illuminate\Contracts\Auth\Authenticatable` interface (an easy way to this is to extends from the `Illuminate\Auth\GenericUser` class).
+
+To use your custom class, you will need to update the configuration file to point to your class instead of the default one. This way, when a user logs in, your custom class will be used to represent the user in the application.
+
+```php
+<?php
+
+namespace App\Auth;
+
+use Illuminate\Auth\GenericUser;
+
+class AuthenticatedUser extends GenericUser
+{
+    /**
+     * Create a new generic User object.
+     *
+     * @param  array<string, mixed>  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes)
+    {
+        parent::__construct($attributes);
+    }
+}
+```
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use App\Auth\AuthenticatedUser;
+
+return [
+    'endpoint' => 'https://remote-token-validation.service/token',
+    'response' => [
+        'user_path' => 'data',
+        'user_class' => AuthenticatedUser::class,
+    ]
+];
 ```
 
 ## Testing
