@@ -39,6 +39,9 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
         return $this->attributes;
     }
 
+    /**
+     * Get attribute by key
+     */
     public function getAttribute(string $key): mixed
     {
         $key = trim($key);

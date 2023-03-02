@@ -29,6 +29,7 @@ class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
 
         $adapter = $this->app->make(AdapterInterface::class);
 
+        /* @phpstan-ignore-next-line */
         Auth::viaRequest(
             'remote-token-auth',
             fn (Request $request): Authenticatable => $adapter->authorize($request)
