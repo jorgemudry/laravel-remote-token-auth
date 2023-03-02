@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JorgeMudry\LaravelRemoteTokenAuth\ValueObjects;
 
 use ArrayAccess;
+use Exception;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -57,7 +60,7 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
      */
     public function offsetExists($offset): bool
     {
-        return is_null($this->getAttribute($offset)) === false;
+        return ($this->getAttribute($offset) === null) === false;
     }
 
     /**
@@ -114,7 +117,7 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
         $json = json_encode($this->jsonSerialize(), $options);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \Exception(json_last_error_msg());
+            throw new Exception(json_last_error_msg());
         }
 
         return strval($json);

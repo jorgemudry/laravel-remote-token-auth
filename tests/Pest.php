@@ -1,4 +1,6 @@
-<?php //phpcs:ignore
+<?php
+
+//phpcs:ignore
 
 declare(strict_types=1);
 

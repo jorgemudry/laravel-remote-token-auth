@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use JorgeMudry\LaravelRemoteTokenAuth\LaravelRemoteTokenAuthAdapter;
-use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
 
 class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
 {
