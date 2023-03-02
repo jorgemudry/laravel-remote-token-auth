@@ -15,7 +15,7 @@ It simplifies the integration process, allowing you to obtain a valid user in no
 ## Requirements
 
 - Laravel 8.x or higher
-- PHP 7.4 or higher
+- PHP 8.0 or higher
 
 ## Installation
 
