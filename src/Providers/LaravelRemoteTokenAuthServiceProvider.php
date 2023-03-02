@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use JorgeMudry\LaravelRemoteTokenAuth\LaravelRemoteTokenAuthAdapter;
+use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
 
 class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
 {
@@ -41,10 +42,10 @@ class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
     public function register(): void
     {
         config([
-            'auth.guards.remote-token-auth' => array_merge([
+            'auth.guards.rta' => array_merge([
                 'driver' => 'remote-token-auth',
                 'provider' => null,
-            ], config('auth.guards.remote-token-auth', [])),
+            ], config('auth.guards.rta', [])),
         ]);
 
         if (app()->configurationIsCached() === false) {
@@ -61,8 +62,9 @@ class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
             function (): LaravelRemoteTokenAuthAdapter {
                 $endpoint = strval(config('remote-token-auth.endpoint'));
                 $path = strval(config('remote-token-auth.response.user_path'));
+                $user_class = strval(config('remote-token-auth.response.user_class'));
 
-                return new LaravelRemoteTokenAuthAdapter($endpoint, $path);
+                return new LaravelRemoteTokenAuthAdapter($endpoint, $path, $user_class);
             }
         );
     }

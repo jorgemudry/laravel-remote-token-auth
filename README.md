@@ -34,12 +34,12 @@ php artisan vendor:publish php artisan vendor:publish --provider="JorgeMudry\Lar
 
 ## Usage
 
-To require authentication for a specific route, simply add the auth middleware and specify the remote-token-auth guard. This will ensure that only authenticated users with a valid token can access the route.
+To require authentication for a specific route, simply add the auth middleware and specify the *rta* guard. This will ensure that only authenticated users with a valid token can access the route.
 
 ```php
 Route::get('/users', function (Request $request) {
     return $request->user();
-})->middleware('auth:remote-token-auth');
+})->middleware('auth:rta');
 ```
 
 ## Advanced Usage

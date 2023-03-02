@@ -8,8 +8,17 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 
+/**
+ * @implements ArrayAccess<string, mixed>
+ */
 class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
 {
+    /**
+     * Create a new generic User object.
+     *
+     * @param  array<string, mixed>  $attributes
+     * @return void
+     */
     public function __construct(array $attributes)
     {
         $attributes['id'] = $attributes['id'] ?? null;
@@ -20,9 +29,9 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
     /**
      * Get the instance as an array.
      *
-     * @return array<TKey, TValue>
+     * @return array<string, mixed>
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->attributes;
     }
@@ -98,10 +107,9 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
     /**
      * Convert the model instance to JSON.
      *
-     * @param  int  $options
-     * @return string
+     * @param int $options
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         $json = json_encode($this->jsonSerialize(), $options);
 

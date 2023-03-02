@@ -6,6 +6,7 @@ namespace JorgeMudry\LaravelRemoteTokenAuth;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\GenericUser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,9 +20,16 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
     public function __construct(
         protected string $endpoint,
         protected string $path,
+        protected string $user_class,
     ) {
     }
 
+    /**
+     * Authorize the user's token using an external service.
+     *
+     * @throws Exception
+     * @throws AuthenticationException
+     */
     public function authorize(Request $request): Authenticatable
     {
         try {
@@ -42,6 +50,21 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
 
         $attributes = Arr::get($response, $this->path, []);
 
-        return new AuthenticatedUser($attributes);
+        /**
+         * @var GenericUser $user
+         * @todo Find a better way to pass static analysis
+         */
+        $user = empty($this->user_class)
+            ? new AuthenticatedUser($attributes)
+            : new $this->user_class($attributes);
+
+        $implements = in_array(
+            Authenticatable::class,
+            class_implements($user)
+        );
+
+        return $implements === false
+            ? new AuthenticatedUser($attributes)
+            : $user;
     }
 }
