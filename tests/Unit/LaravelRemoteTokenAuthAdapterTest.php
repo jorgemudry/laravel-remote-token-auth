@@ -9,10 +9,6 @@ use JorgeMudry\LaravelRemoteTokenAuth\LaravelRemoteTokenAuthAdapter;
 use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
 
 beforeEach(function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
-    });
-
     $this->request = $this->getMockBuilder(Request::class)
         ->disableOriginalConstructor()
         ->getMock();
@@ -25,6 +21,10 @@ beforeEach(function () {
 });
 
 it('returns an authenticated user', function () {
+    Http::fake(function (ClientRequest $request) {
+        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+    });
+
     $this->request->expects($this->once())
         ->method('bearerToken')
         ->willReturn('asdasdasdxczxcsersdef');
@@ -35,6 +35,10 @@ it('returns an authenticated user', function () {
 });
 
 it('throws an AuthenticationException when no token is provided', function () {
+    Http::fake(function (ClientRequest $request) {
+        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+    });
+
     $this->request->expects($this->once())
         ->method('bearerToken')
         ->willReturn('');
@@ -46,7 +50,6 @@ it('throws an AuthenticationException when no token is provided', function () {
 );
 
 it('throws an AuthenticationException on invalid response', function () {
-    Http::clearResolvedInstances();
     Http::fake(function (ClientRequest $request) {
         return Http::response(status: 401);
     });
@@ -62,6 +65,10 @@ it('throws an AuthenticationException on invalid response', function () {
 );
 
 it('sends the token as a bearer token in the request', function () {
+    Http::fake(function (ClientRequest $request) {
+        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+    });
+
     $this->request->expects($this->once())
         ->method('bearerToken')
         ->willReturn('this-is-a-token');
@@ -75,6 +82,10 @@ it('sends the token as a bearer token in the request', function () {
 });
 
 it('returns an AuthenticatedUser when the custom class does not implements Authenticatable', function () {
+    Http::fake(function (ClientRequest $request) {
+        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+    });
+
     $this->request->expects($this->once())
         ->method('bearerToken')
         ->willReturn('this-is-a-token');
@@ -86,6 +97,10 @@ it('returns an AuthenticatedUser when the custom class does not implements Authe
 });
 
 it('returns a cutom User class when is valid', function () {
+    Http::fake(function (ClientRequest $request) {
+        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+    });
+
     $this->request->expects($this->once())
         ->method('bearerToken')
         ->willReturn('this-is-a-token');
@@ -97,7 +112,6 @@ it('returns a cutom User class when is valid', function () {
 });
 
 it('can specify the user data path in the response', function () {
-    Http::clearResolvedInstances();
     Http::fake(function (ClientRequest $request) {
         return Http::response(
             json_encode([
