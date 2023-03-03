@@ -48,7 +48,9 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
             throw new AuthenticationException($th->getMessage());
         }
 
-        $attributes = Arr::get($response, $this->path, []);
+        $attributes = empty($this->path)
+            ? $response
+            : Arr::get($response, $this->path, []);
 
         /**
          * @var GenericUser $user

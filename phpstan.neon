@@ -12,6 +12,11 @@ parameters:
     - vendor/mockery/mockery/library/helpers.php
 
   ignoreErrors:
+    -
+      message: '#Access to an undefined property JorgeMudry\\LaravelRemoteTokenAuth\\ValueObjects\\AuthenticatedUser#'
+      paths:
+        - tests/Unit/AuthenticatedUserTest.php
+
     # Pest implicitly binds $this to the current test case
     # @see https://pestphp.com/docs/underlying-test-case
     -
