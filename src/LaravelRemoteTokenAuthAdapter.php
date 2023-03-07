@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace JorgeMudry\LaravelRemoteTokenAuth;
 
-use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use JorgeMudry\LaravelRemoteTokenAuth\Actions\ActionsResolver;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
 use Throwable;
@@ -21,26 +21,23 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
         protected string $endpoint,
         protected string $path,
         protected string $user_class,
+        protected ActionsResolver $actions,
     ) {
     }
 
     /**
      * Authorize the user's token using an external service.
      *
-     * @throws Exception
      * @throws AuthenticationException
      */
     public function authorize(Request $request): Authenticatable
     {
         try {
-            $token = $request->bearerToken() ?? '';
-
-            if (empty($token)) {
-                throw new Exception('A bearer token is required.');
-            }
+            $token_resolver = $this->actions->getTokenResolver();
+            $token = $token_resolver->execute($request);
 
             $response = Http::asJson()
-                ->withToken($token)
+                ->withToken($token->token())
                 ->get($this->endpoint)
                 ->throw()
                 ->json();

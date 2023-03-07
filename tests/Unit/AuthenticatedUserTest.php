@@ -37,7 +37,7 @@ it('implements the JsonSerializable interface', function (): void {
     expect(class_implements($user))->toContain(\JsonSerializable::class);
 });
 
-it('can access all elements from the attributes as properties', function () {
+it('can access all elements from the attributes as properties', function (): void {
     $user = new AuthenticatedUser([
         'id' => 1,
         'first_name' => 'Tony',

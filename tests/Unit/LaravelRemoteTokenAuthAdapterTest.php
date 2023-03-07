@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Http\Client\Request as ClientRequest;
@@ -8,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 use JorgeMudry\LaravelRemoteTokenAuth\LaravelRemoteTokenAuthAdapter;
 use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $this->request = $this->getMockBuilder(Request::class)
         ->disableOriginalConstructor()
         ->getMock();
@@ -20,10 +22,8 @@ beforeEach(function () {
     $this->adapter = new LaravelRemoteTokenAuthAdapter($this->endpoint, $this->path, $this->user_class);
 });
 
-it('returns an authenticated user', function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
-    });
+it('returns an authenticated user', function (): void {
+    Http::fake(fn (ClientRequest $request) => Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200));
 
     $this->request->expects($this->once())
         ->method('bearerToken')
@@ -34,10 +34,8 @@ it('returns an authenticated user', function () {
     expect($user)->toBeInstanceOf(AuthenticatedUser::class);
 });
 
-it('throws an AuthenticationException when no token is provided', function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
-    });
+it('throws an AuthenticationException when no token is provided', function (): void {
+    Http::fake(fn (ClientRequest $request) => Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200));
 
     $this->request->expects($this->once())
         ->method('bearerToken')
@@ -49,10 +47,8 @@ it('throws an AuthenticationException when no token is provided', function () {
     'A bearer token is required.'
 );
 
-it('throws an AuthenticationException on invalid response', function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(status: 401);
-    });
+it('throws an AuthenticationException on invalid response', function (): void {
+    Http::fake(fn (ClientRequest $request) => Http::response(status: 401));
 
     $this->request->expects($this->once())
         ->method('bearerToken')
@@ -64,10 +60,8 @@ it('throws an AuthenticationException on invalid response', function () {
     'HTTP request returned status code 401'
 );
 
-it('sends the token as a bearer token in the request', function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
-    });
+it('sends the token as a bearer token in the request', function (): void {
+    Http::fake(fn (ClientRequest $request) => Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200));
 
     $this->request->expects($this->once())
         ->method('bearerToken')
@@ -77,14 +71,12 @@ it('sends the token as a bearer token in the request', function () {
 
     Http::assertSent(function (ClientRequest $request) {
         return $request->hasHeader('Authorization', 'Bearer this-is-a-token') &&
-               $request->url() == 'https://my-api.com/token';
+               $request->url() === 'https://my-api.com/token';
     });
 });
 
-it('returns an AuthenticatedUser when the custom class does not implements Authenticatable', function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
-    });
+it('returns an AuthenticatedUser when the custom class does not implements Authenticatable', function (): void {
+    Http::fake(fn (ClientRequest $request) => Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200));
 
     $this->request->expects($this->once())
         ->method('bearerToken')
@@ -96,10 +88,8 @@ it('returns an AuthenticatedUser when the custom class does not implements Authe
     expect($user)->toBeInstanceOf(AuthenticatedUser::class);
 });
 
-it('returns a cutom User class when is valid', function () {
-    Http::fake(function (ClientRequest $request) {
-        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
-    });
+it('returns a cutom User class when is valid', function (): void {
+    Http::fake(fn (ClientRequest $request) => Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200));
 
     $this->request->expects($this->once())
         ->method('bearerToken')
@@ -111,7 +101,7 @@ it('returns a cutom User class when is valid', function () {
     expect($user)->toBeInstanceOf(ValidClass::class);
 });
 
-it('can specify the user data path in the response', function () {
+it('can specify the user data path in the response', function (): void {
     Http::fake(function (ClientRequest $request) {
         return Http::response(
             strval(json_encode([
