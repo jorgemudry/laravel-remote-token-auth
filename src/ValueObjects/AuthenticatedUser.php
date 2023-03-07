@@ -13,6 +13,7 @@ use JsonSerializable;
 
 /**
  * @implements ArrayAccess<string, mixed>
+ * @implements Arrayable<string, mixed>
  */
 class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
 {

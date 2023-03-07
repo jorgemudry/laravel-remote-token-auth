@@ -22,7 +22,7 @@ beforeEach(function () {
 
 it('returns an authenticated user', function () {
     Http::fake(function (ClientRequest $request) {
-        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
     });
 
     $this->request->expects($this->once())
@@ -36,7 +36,7 @@ it('returns an authenticated user', function () {
 
 it('throws an AuthenticationException when no token is provided', function () {
     Http::fake(function (ClientRequest $request) {
-        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
     });
 
     $this->request->expects($this->once())
@@ -66,7 +66,7 @@ it('throws an AuthenticationException on invalid response', function () {
 
 it('sends the token as a bearer token in the request', function () {
     Http::fake(function (ClientRequest $request) {
-        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
     });
 
     $this->request->expects($this->once())
@@ -83,7 +83,7 @@ it('sends the token as a bearer token in the request', function () {
 
 it('returns an AuthenticatedUser when the custom class does not implements Authenticatable', function () {
     Http::fake(function (ClientRequest $request) {
-        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
     });
 
     $this->request->expects($this->once())
@@ -98,7 +98,7 @@ it('returns an AuthenticatedUser when the custom class does not implements Authe
 
 it('returns a cutom User class when is valid', function () {
     Http::fake(function (ClientRequest $request) {
-        return Http::response(json_encode(['id' => 1, 'name' => 'Tony']), 200);
+        return Http::response(strval(json_encode(['id' => 1, 'name' => 'Tony'])), 200);
     });
 
     $this->request->expects($this->once())
@@ -114,12 +114,12 @@ it('returns a cutom User class when is valid', function () {
 it('can specify the user data path in the response', function () {
     Http::fake(function (ClientRequest $request) {
         return Http::response(
-            json_encode([
+            strval(json_encode([
                 'data' => [
                     'id' => 1,
                     'name' => 'Tony',
                 ],
-            ]),
+            ])),
             200
         );
     });

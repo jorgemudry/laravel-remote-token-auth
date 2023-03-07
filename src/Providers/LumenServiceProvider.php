@@ -6,30 +6,21 @@ namespace JorgeMudry\LaravelRemoteTokenAuth\Providers;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use JorgeMudry\LaravelRemoteTokenAuth\LaravelRemoteTokenAuthAdapter;
 
-class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
+class LumenServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      */
     public function boot(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes(
-                [
-                    __DIR__ . '/../../config/remote-token-auth.php' => config_path('remote-token-auth.php'),
-                ],
-                'remote-token-auth'
-            );
-        }
-
         $adapter = $this->app->make(AdapterInterface::class);
 
-        Auth::viaRequest(
+        /* @phpstan-ignore-next-line */
+        $this->app['auth']->viaRequest(
             'remote-token-auth',
             fn (Request $request): Authenticatable => $adapter->authorize($request)
         );
@@ -40,16 +31,16 @@ class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        /* @phpstan-ignore-next-line */
+        $this->app->configure('auth');
+        /* @phpstan-ignore-next-line */
+        $this->app->configure('remote-token-auth');
+
         config([
             'auth.guards.rta' => array_merge([
                 'driver' => 'remote-token-auth',
-                'provider' => null,
             ], config('auth.guards.rta', [])),
         ]);
-
-        if (app()->configurationIsCached() === false) {
-            $this->mergeConfigFrom(__DIR__ . '/../../config/remote-token-auth.php', 'remote-token-auth');
-        }
 
         $this->app->bind(
             AdapterInterface::class,
