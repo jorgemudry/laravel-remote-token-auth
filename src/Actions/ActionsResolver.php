@@ -13,4 +13,12 @@ class ActionsResolver
 
         return new $action();
     }
+
+    public function getRequestMaker(): MakeValidationRequestAction
+    {
+        /** @var MakeValidationRequestAction $action */
+        $action = config('remote-token-auth.actions.request-maker');
+
+        return new $action();
+    }
 }

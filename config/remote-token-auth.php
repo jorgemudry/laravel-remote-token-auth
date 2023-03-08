@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\GetTokenFromRequestAction;
+use JorgeMudry\LaravelRemoteTokenAuth\Actions\MakeValidationRequestAction;
 use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
 
 return [
@@ -12,6 +13,7 @@ return [
         'user_class' => AuthenticatedUser::class
     ],
     'actions' => [
-        'token-resolver' => GetTokenFromRequestAction::class
+        'token-resolver' => GetTokenFromRequestAction::class,
+        'request-maker' => MakeValidationRequestAction::class,
     ],
 ];

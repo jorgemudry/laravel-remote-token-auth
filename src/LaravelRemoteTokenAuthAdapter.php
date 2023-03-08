@@ -9,7 +9,6 @@ use Illuminate\Auth\GenericUser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\ActionsResolver;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
@@ -34,13 +33,9 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
     {
         try {
             $token_resolver = $this->actions->getTokenResolver();
+            $request_maker = $this->actions->getRequestMaker();
             $token = $token_resolver->execute($request);
-
-            $response = Http::asJson()
-                ->withToken($token->token())
-                ->get($this->endpoint)
-                ->throw()
-                ->json();
+            $response = $request_maker->execute($token, $this->endpoint);
         } catch (Throwable $th) {
             throw new AuthenticationException($th->getMessage());
         }
