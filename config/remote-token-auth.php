@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use JorgeMudry\LaravelRemoteTokenAuth\Actions\CreateUserFromAttributesAction;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\GetAttributesFromResponseAction;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\GetTokenFromRequestAction;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\MakeValidationRequestAction;
@@ -17,5 +18,6 @@ return [
         'token-resolver' => GetTokenFromRequestAction::class,
         'request-maker' => MakeValidationRequestAction::class,
         'attributes-resolver' => GetAttributesFromResponseAction::class,
+        'user-maker' => CreateUserFromAttributesAction::class,
     ],
 ];

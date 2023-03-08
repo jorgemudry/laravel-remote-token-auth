@@ -29,4 +29,12 @@ class ActionsResolver
 
         return new $action();
     }
+
+    public function getUserMaker(): CreateUserFromAttributesAction
+    {
+        /** @var CreateUserFromAttributesAction $action */
+        $action = config('remote-token-auth.actions.user-maker');
+
+        return new $action();
+    }
 }
