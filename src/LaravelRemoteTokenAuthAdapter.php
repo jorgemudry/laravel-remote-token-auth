@@ -8,7 +8,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\ActionsResolver;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AuthenticatedUser;
@@ -34,15 +33,14 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
         try {
             $token_resolver = $this->actions->getTokenResolver();
             $request_maker = $this->actions->getRequestMaker();
+            $attributes_resolver = $this->actions->getAttributesResolver();
+
             $token = $token_resolver->execute($request);
             $response = $request_maker->execute($token, $this->endpoint);
+            $attributes = $attributes_resolver->execute($response, $this->path);
         } catch (Throwable $th) {
             throw new AuthenticationException($th->getMessage());
         }
-
-        $attributes = empty($this->path)
-            ? $response
-            : Arr::get($response, $this->path, []);
 
         /**
          * @var GenericUser $user

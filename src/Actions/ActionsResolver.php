@@ -21,4 +21,12 @@ class ActionsResolver
 
         return new $action();
     }
+
+    public function getAttributesResolver(): GetAttributesFromResponseAction
+    {
+        /** @var GetAttributesFromResponseAction $action */
+        $action = config('remote-token-auth.actions.attributes-resolver');
+
+        return new $action();
+    }
 }
