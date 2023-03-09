@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\ActionsResolver;
+use JorgeMudry\LaravelRemoteTokenAuth\Adapter;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
-use JorgeMudry\LaravelRemoteTokenAuth\LaravelRemoteTokenAuthAdapter;
 
 class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
 {
@@ -59,15 +59,13 @@ class LaravelRemoteTokenAuthServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             AdapterInterface::class,
-            function (): LaravelRemoteTokenAuthAdapter {
+            function (): Adapter {
                 $endpoint = strval(config('remote-token-auth.endpoint'));
                 $path = strval(config('remote-token-auth.response.user_path'));
-                $user_class = strval(config('remote-token-auth.response.user_class'));
 
-                return new LaravelRemoteTokenAuthAdapter(
+                return new Adapter(
                     $endpoint,
                     $path,
-                    $user_class,
                     new ActionsResolver(),
                 );
             }

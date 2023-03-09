@@ -11,12 +11,11 @@ use JorgeMudry\LaravelRemoteTokenAuth\Actions\ActionsResolver;
 use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AdapterInterface;
 use Throwable;
 
-class LaravelRemoteTokenAuthAdapter implements AdapterInterface
+class Adapter implements AdapterInterface
 {
     public function __construct(
         protected string $endpoint,
         protected string $path,
-        protected string $user_class,
         protected ActionsResolver $actions,
     ) {
     }
@@ -28,12 +27,12 @@ class LaravelRemoteTokenAuthAdapter implements AdapterInterface
      */
     public function authorize(Request $request): Authenticatable
     {
-        try {
-            $token_resolver = $this->actions->getTokenResolver();
-            $request_maker = $this->actions->getRequestMaker();
-            $attributes_resolver = $this->actions->getAttributesResolver();
-            $user_maker = $this->actions->getUserMaker();
+        $token_resolver = $this->actions->getTokenResolver();
+        $request_maker = $this->actions->getRequestMaker();
+        $attributes_resolver = $this->actions->getAttributesResolver();
+        $user_maker = $this->actions->getUserMaker();
 
+        try {
             $token = $token_resolver->execute($request);
             $response = $request_maker->execute($token, $this->endpoint);
             $attributes = $attributes_resolver->execute($response, $this->path);
