@@ -40,7 +40,7 @@ class Adapter implements AdapterInterface
 
             return $user;
         } catch (Throwable $th) {
-            throw new AuthenticationException($th->getMessage());
+            throw new AuthenticationException($th->getMessage(), ['rta']);
         }
     }
 }

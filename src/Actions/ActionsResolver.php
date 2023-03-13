@@ -9,32 +9,37 @@ class ActionsResolver
     public function getTokenResolver(): GetTokenFromRequestAction
     {
         /** @var GetTokenFromRequestAction $action */
-        $action = config('remote-token-auth.actions.token-resolver');
+        $action = $this->resolve('token-resolver');
 
-        return new $action();
+        return $action;
     }
 
     public function getRequestMaker(): MakeValidationRequestAction
     {
         /** @var MakeValidationRequestAction $action */
-        $action = config('remote-token-auth.actions.request-maker');
+        $action = $this->resolve('request-maker');
 
-        return new $action();
+        return $action;
     }
 
     public function getAttributesResolver(): GetAttributesFromResponseAction
     {
         /** @var GetAttributesFromResponseAction $action */
-        $action = config('remote-token-auth.actions.attributes-resolver');
+        $action = $this->resolve('attributes-resolver');
 
-        return new $action();
+        return $action;
     }
 
     public function getUserMaker(): CreateUserFromAttributesAction
     {
         /** @var CreateUserFromAttributesAction $action */
-        $action = config('remote-token-auth.actions.user-maker');
+        $action = $this->resolve('user-maker');
 
-        return new $action();
+        return $action;
+    }
+
+    protected function resolve(string $config): object
+    {
+        return app(config('remote-token-auth.actions.' . $config));
     }
 }
