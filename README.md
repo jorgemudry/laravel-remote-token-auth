@@ -33,7 +33,7 @@ The package will automatically register its service provider.
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --provider="JorgeMudry\LaravelRemoteTokenAuth\Providers\LaravelRemoteTokenAuthServiceProvider" --tag="config"
+php artisan vendor:publish --provider="JorgeMudry\LaravelRemoteTokenAuth\Providers\LaravelRemoteTokenAuthServiceProvider"
 ```
 
 ## Usage
