@@ -45,7 +45,7 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
      */
     public function getAttribute(string $key): mixed
     {
-        $key = mb_trim($key);
+        $key = trim($key);
 
         if (
             empty($key)
@@ -96,7 +96,7 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
      */
     public function offsetUnset(mixed $offset): void
     {
-        unset($this->attributes[$offset]);
+        unset($this->attributes[(string) $offset]);
     }
 
     /**

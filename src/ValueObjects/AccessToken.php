@@ -21,7 +21,7 @@ class AccessToken implements AccessTokenInterface
 
     protected function validate(): void
     {
-        $this->token = mb_trim(strval(preg_replace('/[^[:print:]]/', '', $this->token)));
+        $this->token = trim(strval(preg_replace('/[^[:print:]]/', '', $this->token)));
 
         if (empty($this->token)) {
             throw new InvalidArgumentException('A bearer token is required.');
