@@ -18,4 +18,4 @@ it('throws an exception if no access token is provided', function (): void {
     $action = new GetTokenFromRequestAction();
     $request = Request::create('/', 'GET');
     $action->execute($request);
-})->throws(\InvalidArgumentException::class, 'A bearer token is required.');
+})->throws(InvalidArgumentException::class, 'A bearer token is required.');

@@ -45,7 +45,7 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
      */
     public function getAttribute(string $key): mixed
     {
-        $key = trim($key);
+        $key = mb_trim($key);
 
         if (
             empty($key)
@@ -59,42 +59,32 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
 
     /**
      * Determine if the given attribute exists.
-     *
-     * @param mixed $offset
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
-        return ($this->getAttribute($offset) === null) === false;
+        return ($this->getAttribute((string) $offset) === null) === false;
     }
 
     /**
      * Get the value for a given offset.
-     *
-     * @param mixed $offset
      */
-    public function offsetGet($offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
-        return $this->getAttribute($offset);
+        return $this->getAttribute((string) $offset);
     }
 
     /**
      * Set the value for a given offset.
-     *
-     * @param  mixed  $offset
-     * @param  mixed  $value
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->setAttribute($offset, $value);
+        $this->setAttribute((string) $offset, $value);
     }
 
     /**
      * Set a given attribute on the model.
-     *
-     * @param  string  $key
-     * @param  mixed  $value
      */
-    public function setAttribute($key, $value): self
+    public function setAttribute(string $key, mixed $value): self
     {
         $this->attributes[$key] = $value;
 
@@ -103,10 +93,8 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
 
     /**
      * Unset the value for a given offset.
-     *
-     * @param  mixed  $offset
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->attributes[$offset]);
     }

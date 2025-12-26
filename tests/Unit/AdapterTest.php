@@ -12,7 +12,7 @@ use Mockery\MockInterface;
 it('authorizes the user when given a valid token', function (): void {
     $this->instance(
         MakeValidationRequestAction::class,
-        Mockery::mock(MakeValidationRequestAction::class, function (MockInterface $mock) {
+        Mockery::mock(MakeValidationRequestAction::class, function (MockInterface $mock): void {
             $mock->shouldReceive('execute')->once()->andReturn(['id' => 1, 'name' => 'Tony Stark']);
         })
     );
@@ -33,8 +33,8 @@ it('authorizes the user when given a valid token', function (): void {
 it('throws an authentication exception when given an invalid token', function (): void {
     $this->instance(
         MakeValidationRequestAction::class,
-        Mockery::mock(MakeValidationRequestAction::class, function (MockInterface $mock) {
-            $mock->shouldReceive('execute')->once()->andThrow(new \Exception('User not valid.'));
+        Mockery::mock(MakeValidationRequestAction::class, function (MockInterface $mock): void {
+            $mock->shouldReceive('execute')->once()->andThrow(new Exception('User not valid.'));
         })
     );
 

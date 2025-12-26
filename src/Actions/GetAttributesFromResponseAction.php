@@ -9,14 +9,14 @@ use Illuminate\Support\Arr;
 class GetAttributesFromResponseAction
 {
     /**
-     * @param array<string, mixed> $respose
+     * @param array<string, mixed> $response
      * @return array<string, mixed>
      */
-    public function execute(array $respose, string $path): array
+    public function execute(array $response, string $path): array
     {
         $attributes = empty($path)
-            ? $respose
-            : Arr::get($respose, $path, []);
+            ? $response
+            : Arr::get($response, $path, []);
 
         return $attributes;
     }
