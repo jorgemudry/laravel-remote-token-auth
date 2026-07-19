@@ -64,7 +64,9 @@ class AuthenticatedUser extends GenericUser implements Arrayable, ArrayAccess, J
      */
     public function offsetExists($offset): bool
     {
-        return ($this->getAttribute($offset) === null) === false;
+        // Normalize the key the same way getAttribute()/offsetGet() do, so
+        // isset() and read access always agree.
+        return array_key_exists(trim(strval($offset)), $this->attributes);
     }
 
     /**

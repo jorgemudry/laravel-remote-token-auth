@@ -2,42 +2,51 @@
 
 declare(strict_types=1);
 
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\MakeValidationRequestAction;
-use JorgeMudry\LaravelRemoteTokenAuth\Contracts\AccessTokenInterface;
+use JorgeMudry\LaravelRemoteTokenAuth\Exceptions\InvalidUserResponseException;
+use JorgeMudry\LaravelRemoteTokenAuth\ValueObjects\AccessToken;
 
-test('execute method should return an array', function (): void {
-    /** @var \Mockery\MockInterface|\Mockery\LegacyMockInterface $token */
-    $token = Mockery::mock(AccessTokenInterface::class);
-    $token->shouldReceive('token')->once()->andReturn('valid_token');
+it('sends the token to the endpoint and returns the decoded response', function (): void {
+    Http::fake(['auth.example.com/*' => Http::response(['id' => 1, 'name' => 'Tony Stark'])]);
 
-    $httpMock = Mockery::mock('alias:' . Http::class);
-    $httpMock->shouldReceive('asJson')->once()->andReturnSelf();
-    $httpMock->shouldReceive('withToken')->once()->with('valid_token')->andReturnSelf();
-    $httpMock->shouldReceive('get')->once()->with('http://example.com/api')->andReturnSelf();
-    $httpMock->shouldReceive('throw')->once()->andReturnSelf();
-    $httpMock->shouldReceive('json')->once()->andReturn(['response' => 'success']);
+    $action = new MakeValidationRequestAction('https://auth.example.com/validate');
+    $response = $action->execute(new AccessToken('secret-token'));
 
-    $action = new MakeValidationRequestAction();
-
-    $result = $action->execute($token, 'http://example.com/api');
-
-    expect($result)->toBeArray();
+    expect($response)->toBe(['id' => 1, 'name' => 'Tony Stark']);
+    Http::assertSent(
+        fn (ClientRequest $request): bool => $request->hasHeader('Authorization', 'Bearer secret-token')
+            && $request->hasHeader('Accept', 'application/json')
+    );
 });
 
-test('execute method should throw an exception if the HTTP response is not successful', function (): void {
-    $token = Mockery::mock(AccessTokenInterface::class);
-    $token->shouldReceive('token')->once()->andReturn('valid_token');
+it('throws a request exception when the service rejects the token', function (): void {
+    Http::fake(['auth.example.com/*' => Http::response('', 401)]);
 
-    $httpMock = Mockery::mock('alias:' . Http::class);
-    $httpMock->shouldReceive('asJson')->once()->andReturnSelf();
-    $httpMock->shouldReceive('withToken')->once()->with('valid_token')->andReturnSelf();
-    $httpMock->shouldReceive('get')->once()->with('http://example.com/api')->andReturnSelf();
-    $httpMock->shouldReceive('throw')->once()->andThrow(new Exception('Invalid response'));
+    $action = new MakeValidationRequestAction('https://auth.example.com/validate');
 
-    $action = new MakeValidationRequestAction();
+    expect(fn (): array => $action->execute(new AccessToken('bad-token')))
+        ->toThrow(RequestException::class);
+});
 
-    expect(function () use ($action, $token): void {
-        $action->execute($token, 'http://example.com/api');
-    })->toThrow(Exception::class, 'Invalid response');
+it('throws a request exception when the service fails', function (): void {
+    Http::fake(['auth.example.com/*' => Http::response('', 500)]);
+
+    $action = new MakeValidationRequestAction('https://auth.example.com/validate');
+
+    expect(fn (): array => $action->execute(new AccessToken('secret-token')))
+        ->toThrow(RequestException::class);
+});
+
+it('throws when the response is not a JSON object', function (): void {
+    Http::fake([
+        'auth.example.com/*' => Http::response('"just-a-string"', 200, ['Content-Type' => 'application/json']),
+    ]);
+
+    $action = new MakeValidationRequestAction('https://auth.example.com/validate');
+
+    expect(fn (): array => $action->execute(new AccessToken('secret-token')))
+        ->toThrow(InvalidUserResponseException::class);
 });

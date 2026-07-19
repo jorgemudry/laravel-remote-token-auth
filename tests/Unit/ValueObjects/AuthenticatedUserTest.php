@@ -22,7 +22,7 @@ it('implements the Arrayable interface', function (): void {
 it('implements the ArrayAccess interface', function (): void {
     $user = new AuthenticatedUser(['id' => 1, 'name' => 'Tony']);
 
-    expect(class_implements($user))->toContain(\ArrayAccess::class);
+    expect(class_implements($user))->toContain(ArrayAccess::class);
 });
 
 it('implements the Jsonable interface', function (): void {
@@ -34,7 +34,21 @@ it('implements the Jsonable interface', function (): void {
 it('implements the JsonSerializable interface', function (): void {
     $user = new AuthenticatedUser(['id' => 1, 'name' => 'Tony']);
 
-    expect(class_implements($user))->toContain(\JsonSerializable::class);
+    expect(class_implements($user))->toContain(JsonSerializable::class);
+});
+
+it('reports existing attributes even when their value is null', function (): void {
+    $user = new AuthenticatedUser(['id' => 1, 'nickname' => null]);
+
+    expect(isset($user['nickname']))->toBeTrue();
+    expect(isset($user['missing']))->toBeFalse();
+});
+
+it('keeps isset and read access consistent for keys with surrounding whitespace', function (): void {
+    $user = new AuthenticatedUser(['id' => 1, 'name' => 'Tony']);
+
+    expect(isset($user['name ']))->toBeTrue();
+    expect($user['name '])->toBe('Tony');
 });
 
 it('can access all elements from the attributes as properties', function (): void {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Http\Request;
 use JorgeMudry\LaravelRemoteTokenAuth\Actions\GetTokenFromRequestAction;
+use JorgeMudry\LaravelRemoteTokenAuth\Exceptions\InvalidTokenException;
 
 it('can get the access token from a request', function (): void {
     $action = new GetTokenFromRequestAction();
@@ -18,4 +19,4 @@ it('throws an exception if no access token is provided', function (): void {
     $action = new GetTokenFromRequestAction();
     $request = Request::create('/', 'GET');
     $action->execute($request);
-})->throws(\InvalidArgumentException::class, 'A bearer token is required.');
+})->throws(InvalidTokenException::class, 'A bearer token is required.');

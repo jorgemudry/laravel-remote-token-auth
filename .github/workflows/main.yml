@@ -9,44 +9,44 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2, 8.1, 8.0]
-        laravel: [10.*, 9.*, 8.*]
+        php: [8.4, 8.3, 8.2, 8.1]
+        laravel: [12.*, 11.*, 10.*]
         dependency-version: [prefer-stable]
         include:
+          - laravel: 12.*
+            testbench: 10.*
+          - laravel: 11.*
+            testbench: 9.*
           - laravel: 10.*
             testbench: 8.*
-          - laravel: 9.*
-            testbench: 7.*
-          - laravel: 8.*
-            testbench: 6.*
         exclude:
-          - php: 8.0
-            laravel: 10.*
           - php: 8.1
-            laravel: 8.*
-          - php: 8.2
-            laravel: 8.*
+            laravel: 12.*
+          - php: 8.1
+            laravel: 11.*
+          - php: 8.4
+            laravel: 10.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - T${{ matrix.testbench }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, fileinfo
           coverage: none
 
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+
       - name: Execute tests
         run: ./vendor/bin/pest
