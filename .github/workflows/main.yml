@@ -45,6 +45,11 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # Laravel 10/11 are past security-fix EOL, so every release carries
+          # open advisories and Composer's advisory policy refuses to install
+          # them. Testing against those versions is the whole point of this
+          # matrix, so disable the block (CI only).
+          composer config policy.advisories.block false
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
